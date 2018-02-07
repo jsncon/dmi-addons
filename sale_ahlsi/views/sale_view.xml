@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+<data>
+<template id="view_order_form_inherit_sale_ahlsi" inherit_id="sale_stock.view_order_form_inherit">
+    <xpath expr="//field[@name='warehouse_id']" position="replace">
+        <field name="warehouse_id" string="Chamber" on_change="onchange_warehouse_id(warehouse_id)" options="{'no_create': True}" groups="stock.group_locations"/>
+    </xpath>
+</template>
+</data>
+</openerp>

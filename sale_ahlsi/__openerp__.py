@@ -9,6 +9,7 @@
 		'sale'
     ],
     'data': [
+	    'views/sale_view.xml'
     ],
     
     'installable': True,
