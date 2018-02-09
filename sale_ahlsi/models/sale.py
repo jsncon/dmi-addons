@@ -66,8 +66,7 @@ class SaleOrder(models.Model):
         """
         """
         self.ensure_one()
-        #self.appointment_datetime = "%s %s:0:0" % (self.appointment_date,self.appointment_time) 
-		    # Get user time zone if none use default: UTC
+		# Get user time zone if none use default: UTC
         if not (self.appointment_date and self.appointment_time):
             return True
 			
@@ -88,7 +87,6 @@ class SaleOrder(models.Model):
         order_time.replace(tzinfo=order_time_zone)
 		
         self.appointment_datetime = order_time.astimezone(pytz.UTC).strftime(format)
-        #self.note = str(self.appointment_datetime)
-        #self.note = str(self.env.user.partner_id.tz)
+		
         return True
 		
