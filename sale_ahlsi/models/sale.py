@@ -12,7 +12,9 @@ class SaleOrder(models.Model):
 	
     _inherit = "sale.order"
 	
-    appointment_datetime = fields.Datetime(string="Appointment Datetime")
+    chamber_id = fields.Many2one(comodel_name='stock.warehouse', string='Chamber', compute='_compute_chamber_id', store=True, readonly=True)
+	
+    appointment_datetime = fields.Datetime(string="Appointment Datetime", compute='_compute_appointment_datetime', store=True)
     appointment_date = fields.Date(string="Appointment Date")
     appointment_time = fields.Selection([
             (8,'8 AM'),
@@ -21,8 +23,17 @@ class SaleOrder(models.Model):
             (14,'2 PM'),
             (16,'4 PM'),
         ], string='Appointment Time')
-
-    #@api.depends('appointment_date','appointment_time')
+	
+    @api.multi	
+    @api.depends('chamber_id')
+    def _compute_chamber_id(self):
+        """
+        """
+        for rec in self:
+            rec.chamber_id = self.env['sale.order'].browse(rec.id).warehouse_id
+		
+		
+    @api.depends('appointment_date','appointment_time','appointment_datetime')
     def _compute_appointment_datetime(self):
         """
         """

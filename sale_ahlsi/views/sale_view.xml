@@ -7,9 +7,11 @@
 		<field name="model">sale.order</field>
 		<field name="inherit_id" ref="sale.view_order_form"/>
 		<field name="arch" type="xml">
+			<!-- For Testing Purposes Only
 			<xpath expr="//button[@name='invoice_recreate']" position="after">
 				<button name="action_test" string="TEST" type="object" groups="base.group_user"/>
 			</xpath>
+			-->
 			<xpath expr="//field[@name='project_id']" position="after">
 				<field name="appointment_date"/>
 				<field name="appointment_time"/>
@@ -25,7 +27,8 @@
 		    <xpath expr="//calendar[@date_start='date_order']" position="replace">
 				<calendar string="Sales Orders" color="state" date_start="appointment_datetime">
                     <field name="partner_id"/>
-                    <field name="amount_total"/>
+                    <!-- <field name="amount_total"/> -->
+					<field name="chamber_id"/>
                 </calendar>
 			</xpath>
 		</field>
