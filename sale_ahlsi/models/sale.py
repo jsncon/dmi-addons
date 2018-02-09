@@ -89,4 +89,3 @@ class SaleOrder(models.Model):
         self.appointment_datetime = order_time.astimezone(pytz.UTC).strftime(format)
 		
         return True
-		

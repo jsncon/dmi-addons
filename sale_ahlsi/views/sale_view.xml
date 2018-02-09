@@ -16,6 +16,9 @@
 				<field name="appointment_date"/>
 				<field name="appointment_time"/>
 			</xpath>
+			<xpath expr="//label[@string='Sales Order ']" position="replace">
+                <label string="Service Order " attrs="{'invisible': [('state','in',('draft','sent'))]}"/>
+			</xpath>
 		</field>
 	</record>
 	
