@@ -28,7 +28,7 @@
 				<calendar string="Sales Orders" color="state" date_start="appointment_datetime">
                     <field name="partner_id"/>
                     <!-- <field name="amount_total"/> -->
-					<field name="chamber_id"/>
+                    <field name="chamber_id"/>
                 </calendar>
 			</xpath>
 		</field>
