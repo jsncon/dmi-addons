@@ -9,7 +9,8 @@
 		'sale'
     ],
     'data': [
-	    'views/sale_view.xml'
+	    'views/sale_view.xml',
+		'views/report_saleorder.xml'
     ],
     
     'installable': True,

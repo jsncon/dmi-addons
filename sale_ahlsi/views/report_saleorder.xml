@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+<data>
+	<template id="report_saleorder_inherit_sale_ahlsi" inherit_id="sale.report_saleorder_document">
+		<xpath expr="//h2/span[@t-if=&quot;o.state not in [&apos;draft&apos;,&apos;sent&apos;]&quot;]" position="replace">
+			<span t-if="o.state not in ['draft','sent']">Service Order</span>
+		</xpath>
+	</template>
+</data>
+</openerp>
