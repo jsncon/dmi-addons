@@ -6,11 +6,11 @@
     'website': "http://www.dmi.com.ph",
     'category': 'stock',
     'depends': [
-		'sale'
+		'sale','sale_stock'
     ],
     'data': [
-	    'views/sale_view.xml',
-		'views/report_saleorder.xml'
+        'views/sale_view.xml',
+        'views/report_saleorder.xml'
     ],
     
     'installable': True,
