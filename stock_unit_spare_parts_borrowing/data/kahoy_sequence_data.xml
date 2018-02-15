@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <!-- <data noupdate="1"> -->
+	<data>
+        <record id="seq_type_kahoy_order" model="ir.sequence.type">
+            <field name="name">Kahoy Orders</field>
+            <field name="code">kahoy.order</field>
+        </record>
+        <record id="seq_kahoy_order" model="ir.sequence">
+            <field name="name">Kahoy Orders</field>
+            <field name="code">kahoy.order</field>
+            <field name="prefix">KO</field>
+            <field name="padding">3</field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+<!-- Create Main Menu 
+        <menuitem name="Stock Transfer"
+            id="base.custom_stocktransfer_root"
+            sequence="60"/>-->
+<!-- Create Sub Menu 
+       <menuitem id="menu_custom_stocktransfer_root" 
+       name="Stock Transfer"
+            parent="base.custom_stocktransfer_root" 
+            sequence="1" />--> 
+            
+    <!--List View-->
+    <record id="stock_parts_borrow_view_tree" model="ir.ui.view">
+        <field name="name">stock.parts.borrow.tree</field>
+        <field name="model">stock.parts.borrow</field>
+        <field name="arch" type="xml">
+            <!-- Title -->
+            <tree string="Stock Transfer" default_order="id desc">
+                <!-- Table Headers -->
+		        <field name="name"/>
+				<field name="unit_id"/>
+                <field name="serial_id"/>
+		        <field name="confirm_date"/>    
+		        <field name="from_location_id"/>
+		        <field name="state"/>     
+            </tree>
+        </field>
+    </record>
+    <!--Form View-->
+    <record id="stock_parts_borrow_view_form" model="ir.ui.view">
+        <field name="name">stock.parts.borrow.form.view</field>
+        <field name="model">stock.parts.borrow</field>
+        <field name="arch" type="xml">
+            <form string="Stock Transfer">
+				
+            	<header>
+            		<button name="action_request" type="object" states="draft" string="Request Order" 
+						confirm="Request Kahoy With These Parts?" class="oe_highlight"/>
+					<button name="action_confirm" type="object" states="request" string="Confirm Order"/>
+            		<button name="action_view_delivery" type="object" states="draft,wait_transfer,kahoy,assembly,done,wait_return,cancel" string="View Delivery Order" class="oe_highlight"/>
+					<button name="action_assembly" type="object" states="kahoy" string="Start Assembly" class="oe_highlight"/> 
+					<button name="action_order_cancel" type="object" states="draft,request,kahoy" string="Cancel Order"/>
+					<button name="action_rekahoy" type="object" states="kahoy" string="Re Kahoy Unit"/>
+					<button name="action_test" type="object" string="TEST"/>
+					<field name="state" widget="statusbar"
+                               statusbar_visible="draft,request,wait_transfer,kahoy,assembly,done"
+                               statusbar_colors='{}'/>
+				</header>	
+				
+        	    <!-- Makes the form popout to a sheet instead of being a background -->
+            	<sheet string="Stock Transfer">
+					
+            		<h1>
+	            		<label string="Draft " attrs="{'invisible': [('state','not in','draft')]}" class="oe_inline"/>
+						<label string="Kahoy Order " attrs="{'invisible': [('state','in','draft')]}"/>
+						<field name="name" readonly="1" class="oe_inline"/>
+					</h1>
+					
+               		<group>
+            			<!-- Groups the fields to left column -->
+	                	<group>
+							<field name="unit_id" attrs="{'readonly': [('state','not in',['draft','re_kahoy'])]}"/>
+							<field name="serial_id" attrs="{'invisible': [('state','not in',['wait_transfer','kahoy','re_kahoy','assembly','done','cancel'])]}"/>
+							<field name="unit_uom" invisible="1" attrs="{'invisible': [('state','in',['wait_transfer','kahoy','re_kahoy','done','cancel'])]}" readonly="0"/>
+	                		<field name="from_location_id"
+								attrs="{'readonly': [('state','not in',['draft','re_kahoy'])]}"
+								options="{'no_create': 1}"
+								domain="[('name','not ilike','kahoy')]"
+							/>
+							<field name="to_location_id" 
+								attrs="{'readonly': [('state','not in',['draft','re_kahoy'])]}"
+								options="{'no_create': 1}"
+								domain="[('name','ilike','kahoy')]"
+							/>
+	                	</group>
+                		<!-- Groups the fields to right column -->
+	                	<group>
+							<field name="created_date"/>
+	                		<field name="confirm_date"/>
+							<field name="request_by"/>
+							<field name="confirm_by"/>
+	                	</group>
+	                	<group>
+	                		<field name="note" placeholder="Important Notes Goes Here.."/>
+	                	</group>
+					</group> 
+					<notebook>
+						<page string="Order Lines">
+							<field name="list_ids" context="{}" attrs="{'readonly': [('state','not in',['draft','request'])]}">
+							<tree string="Transfer Order Lines" editable="bottom">
+								<field name="product_id" attrs="{'readonly': [('state', 'in', ['done','cancel'])]}"/>
+								<field name="qty" attrs="{'readonly': [('state', 'in', ['done','cancel'])]}"/>
+								<field name="product_uom"/>
+								<field name="state" invisible="1"/>
+							</tree>
+							</field>
+						</page>
+						<page string="Already Kahoy Parts">
+							<field name="old_list_ids" attrs="{'readonly': 1}">
+							<tree string="Already Transfered Parts" editable="bottom">
+								<field name="product_id"/>
+								<field name="qty"/>
+								<field name="product_uom"/>
+								<field name="state" invisible="1"/>
+							</tree>
+							</field>
+						</page>
+						<page string="ReKahoy Orders">
+							<field name="old_revision_ids" context="{}" attrs="{'readonly': 1}">
+							<tree string="Rekahoy Orders">
+								<field name="name"/>
+								<field name="create_date" string="Superseeded on"/>
+								<field name="create_uid" string="Superseeded by"/>
+								<field name="state" invisible="1"/>
+							</tree>
+							</field>
+						</page>
+					</notebook>
+					<!--
+					<group>
+	                	<field name="confirm_by" string="Confirmed By " readonly="1"/>
+	                </group>
+					-->
+            	</sheet>       
+            </form>
+        </field>
+    </record>
+<!-- Create Sub Menu Function Menu -->
+    <record id="stock_parts_borrow_action" model="ir.actions.act_window">
+        <field name="name">Kahoy Orders</field>
+        <field name="res_model">stock.parts.borrow</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id"  eval="False"/>
+        <field name="context">{}</field>
+		<field name="domain">[('state', 'not in', ('wait_return','cancel'))]</field>
+        <field name="help">Request Kahoy Orders. Orders that Get Parts from a Working Unit.</field>
+    </record>   
+    
+<menuitem action="stock_parts_borrow_action"
+        id="menu_action_custom_stocktransfer"
+        parent="module_stocktransfer.menu_custom_stocktransfer_root" sequence="21"/>
+    </data>
+</openerp>
